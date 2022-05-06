@@ -9,7 +9,8 @@ Type=simple
 User={{ user }}
 Group={{ group }}
 ExecReload=/bin/kill -HUP
-ExecStart=/usr/local/bin/kafka_exporter --kafka.server={% if kafka_bind_localhost == true %}localhost{% else %}{{ ansible_default_ipv4.address }}{% endif %}:{{ kafka_port }} --web.listen-address=:{{ exporter_port }}
+ExecStart=/usr/local/bin/kafka_exporter --kafka.server={% if kafka_bind_localhost == true %}localhost{% else %}{{ ansible_default_ipv4.address }}{% endif %}:{{ kafka_port }} --web.listen-address=:{{ exporter_port }}{% if exporter_topic_filter != "" %} --topic.filter="{{ exporter_topic_filter }}"{% endif %}{% if exporter_log_sarama == true %} --log.enable-sarama{% endif %}
+
 SyslogIdentifier=kafka-exporter
 Restart=always
 
